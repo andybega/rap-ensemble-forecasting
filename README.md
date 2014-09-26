@@ -1,6 +1,6 @@
 Replication materials for "Ensemble Forecasting of Irregular Leadership Change"
-=====
 
+<!---
 Citation:
 
 "blah blah"
@@ -14,6 +14,7 @@ Citation:
       issue={},
       pages={}
     }
+   -->
 
 Getting the code and data
 -----
