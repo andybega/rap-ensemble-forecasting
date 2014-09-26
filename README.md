@@ -21,7 +21,7 @@ Getting the code and data
 
 The easiest way to get the replication code is to download a zip. Alternatively, you can clone the repository through the Github GUI client.
 
-The data, including several intermediate results, are available on dataverse.
+The data, including several intermediate results, are available on dataverse: [http://dx.doi.org/10.7910/DVN/27452](http://dx.doi.org/10.7910/DVN/27452).
 
 
 Running the replication
