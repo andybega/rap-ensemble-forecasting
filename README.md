@@ -19,7 +19,7 @@ Citation:
 Getting the code and data
 -----
 
-The easiest way to get the replication code is to download a zip. Alternatively, you can clone the repository through the Github GUI client.
+The easiest way to get the replication code is to [download a zip](https://github.com/andybega/rap-ensemble-forecasting/archive/master.zip). Alternatively, you can clone the repository through the Github GUI client ([OS X](https://mac.github.com/), [Windows](https://windows.github.com/)).
 
 The data, including several intermediate results, are available on dataverse: [http://dx.doi.org/10.7910/DVN/27452](http://dx.doi.org/10.7910/DVN/27452).
 
