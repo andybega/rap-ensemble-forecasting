@@ -26,7 +26,7 @@ Getting the code and data
 
 The easiest way to get the replication code is to [download a zip](https://github.com/andybega/rap-ensemble-forecasting/archive/master.zip). Alternatively, you can clone the repository through the Github GUI client ([OS X](https://mac.github.com/), [Windows](https://windows.github.com/)).
 
-The data, including several intermediate results, are available on dataverse: [http://dx.doi.org/10.7910/DVN/27452](http://dx.doi.org/10.7910/DVN/27452).
+The data, including several intermediate results, are available on dataverse: [http://dx.doi.org/10.7910/DVN/27482](http://dx.doi.org/10.7910/DVN/27482).
 
 
 Running the replication
@@ -34,7 +34,7 @@ Running the replication
 
 1. [Download](https://github.com/andybega/rap-ensemble-forecasting/archive/master.zip) or [clone](github-mac://openRepo/https://github.com/andybega/rap-ensemble-forecasting) this repository. 
 
-2. Download the 3 data sets on Dataverse []() and place them in `replication/data`.
+2. Download the 3 data sets on [Dataverse](http://dx.doi.org/10.7910/DVN/27482) and place them in `replication/data`.
 
 3. In `runme.R`, change the working directory path on line 33.
 
