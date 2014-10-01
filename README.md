@@ -3,7 +3,7 @@
 
 For questions contact the corresponding author [Michael Ward](mailto:michael.d.ward@duke.edu) or [Andreas Beger](andreas.beger@duke.edu).
 
-The complete [original PITF report](http://arxiv.org/abs/1409.7105) is available on arXiv, and contains a large amount of additional information on the method we used for forecasting, accuracy assessments, etc.
+The complete [original PITF report](http://arxiv.org/abs/1409.7105) is available on arXiv.org, and contains a large amount of additional information on the method we used for forecasting, accuracy assessments, etc.
 
 <!---
 Citation:
