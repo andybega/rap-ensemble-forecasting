@@ -1,4 +1,5 @@
 **Replication materials for "Ensemble Forecasting of Irregular Leadership Change"**
+***
 
 For questions contact the corresponding author [Michael Ward](mailto:michael.d.ward@duke.edu) or [Andreas Beger](andreas.beger@duke.edu).
 
