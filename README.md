@@ -3,10 +3,12 @@
 
 For questions contact the corresponding author [Michael Ward](mailto:michael.d.ward@duke.edu) or [Andreas Beger](andreas.beger@duke.edu).
 
+The complete [original PITF report](http://arxiv.org/abs/1409.7105) is available on arXiv, and contains a large amount of additional information on the method we used for forecasting, accuracy assessments, etc.
+
 <!---
 Citation:
 
-"blah blah"
+Beger, Andreas, Cassy L. Dorff, and Michael D. Ward, 2014, "Ensemble Forecasting of Irregular Regime Change," Research & Politics.
 
     @article{beger2014ensemble,
       title={Ensemble Forecasting of Irregular Leadership Changes},
@@ -16,7 +18,7 @@ Citation:
       volume={},
       issue={},
       pages={}
-    }
+    }    
    -->
 
 Getting the code and data
