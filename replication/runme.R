@@ -30,7 +30,7 @@
 ##
 
 # Set to path containing replication folder
-setwd("~/Dropbox/Work/PITF/IrregularRegimeChange/RAP submission/replication")
+setwd("~/Desktop/rap-ensemble-forecasting/replication")
 
 # Install packages in R/packages if not already done
 if (!is.element("EBMAforecastbeta", installed.packages()[, 1])) {

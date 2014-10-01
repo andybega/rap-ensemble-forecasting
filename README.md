@@ -1,15 +1,17 @@
-Replication materials for "Ensemble Forecasting of Irregular Leadership Change"
+**Replication materials for "Ensemble Forecasting of Irregular Leadership Change"**
+
+For questions contact the corresponding author [Michael Ward](mailto:michael.d.ward@duke.edu) or [Andreas Beger](andreas.beger@duke.edu).
 
 <!---
 Citation:
 
 "blah blah"
 
-    @article{citekey,
-      title={},
-      author={},
-      journal={},
-      year={},
+    @article{beger2014ensemble,
+      title={Ensemble Forecasting of Irregular Leadership Changes},
+      author={Beger, Andreas, Dorff, Cassy L., Ward, Michael D.},
+      journal={Research \& Politics},
+      year={2014},
       volume={},
       issue={},
       pages={}
@@ -27,7 +29,13 @@ The data, including several intermediate results, are available on dataverse: [h
 Running the replication
 -----
 
-Source or run the code in `runme.R`. We recommend running through the code block by block rather than sourcing. The original analysis was run on OS X using R 3.0.2 and 3.1.1.
+1. [Download](https://github.com/andybega/rap-ensemble-forecasting/archive/master.zip) or [clone](github-mac://openRepo/https://github.com/andybega/rap-ensemble-forecasting) this repository. 
+
+2. Download the 3 data sets on Dataverse []() and place them in `replication/data`.
+
+3. In `runme.R`, change the working directory path on line 33.
+
+4. Source or run the code in `runme.R`. We recommend running through the code block by block rather than sourcing. The original analysis was run on OS X using R 3.0.2 and 3.1.1.
 
 The script relies on two packages, `EBMAforecastbeta` and `spduration` that are not available on CRAN. They are included in `replication/R/packages` with both OS X and Windows versions. The replication script will attempt to install them if they are not already present, but you may have to do so manually if this fails.
 
