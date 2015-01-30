@@ -1,25 +1,27 @@
-**Replication materials for "Ensemble Forecasting of Irregular Leadership Change"**
+**Replication materials for:<br/> 
+[Ensemble Forecasting of Irregular Leadership Change](http://rap.sagepub.com/content/1/3/2053168014557511)**
 ***
 
 For questions contact the corresponding author [Michael Ward](mailto:michael.d.ward@duke.edu) or [Andreas Beger](andreas.beger@duke.edu).
 
 The complete [original PITF report](http://arxiv.org/abs/1409.7105) is available on arXiv.org, and contains a large amount of additional information on the method we used for forecasting, accuracy assessments, etc.
 
-<!---
-Citation:
+
+**Citation:**
 
 Beger, Andreas, Cassy L. Dorff, and Michael D. Ward, 2014, "Ensemble Forecasting of Irregular Regime Change," Research & Politics.
 
-    @article{beger2014ensemble,
-      title={Ensemble Forecasting of Irregular Leadership Changes},
-      author={Beger, Andreas, Dorff, Cassy L., Ward, Michael D.},
-      journal={Research \& Politics},
-      year={2014},
-      volume={},
-      issue={},
-      pages={}
-    }    
-   -->
+```bibtex
+@article{beger2014ensemble,
+  title={Ensemble Forecasting of Irregular Leadership Changes},
+  author={Beger, Andreas, Dorff, Cassy L., Ward, Michael D.},
+  journal={Research \& Politics},
+  year={2014},
+  volume={1},
+  issue={3},
+  pages={1-7}
+}    
+```
 
 Getting the code and data
 -----
