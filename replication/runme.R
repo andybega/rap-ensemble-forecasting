@@ -1,20 +1,31 @@
-##
-##		Replication for PITF Irregular Regime Change 
-##		21 August 2014
-##		Andreas Beger (andreas.beger@duke.edu)
-##
-
-# The "replication" folder, alongside with this script, contains 2 R packages
-# that are needed but not available on CRAN, several functions, and several
-# data files. The data files include the main data, "irc.data", as well 
-# as intermediate steps in the results like saved theme model estimates, 
-# the ensemble model data object and ensemble model estimates themselves.
+#
+#		Replication for PITF Irregular Regime Change 
+#		21 August 2014
+#		Andreas Beger (adbeger@gmail.com)
+#
+#   The "replication" folder, alongside with this script, contains 2 R packages
+#   that are needed but not available on CRAN, several functions, and several
+#   data files. The data files include the main data, "irc.data", as well 
+#   as intermediate steps in the results like saved theme model estimates, 
+#   the ensemble model data object and ensemble model estimates themselves.
 # 
-# We have verified that it runs on R xxx on Windows 7
-# Mid-2012 MacBook Pro 2.5 GHz Intel Core i5 OS X 10.9.4 with R 3.1.1
+#   We have verified that it runs on R xxx on Windows 7
+#   Mid-2012 MacBook Pro 2.5 GHz Intel Core i5 OS X 10.9.4 with R 3.1.1
 # 
-# Results may differ slightly by system, but we have included intermediate
-# estimates/data needed to exactly replicate the results reported.
+#   Results may differ slightly by system, but we have included intermediate
+#   estimates/data needed to exactly replicate the results reported.
+#
+#   Changelog
+#
+#   2015-01-30: original replication materials on GitHub
+#   2019-04-11: update/fix replication issues
+#     - use the CRAN version of spduration
+#     - fix inconsistencies in ensembleForecast() and predDate() relating
+#       to how the input given to weighInputs() was structured.
+#     - Add .tex output for the two tables to output/version control.
+#       Note that Table 1, the fit comparison, does not exactly replicate, 
+#       in part because back in the day I did not save the logit and 
+#       full spduration model fit. 
 #
 
 ##------------------------------------------------------------------------------
@@ -30,7 +41,9 @@
 ##
 
 # Set to path containing replication folder
-setwd("~/Desktop/rap-ensemble-forecasting/replication")
+library("here")
+setwd(here::here("replication"))
+
 
 # Install packages in R/packages if not already done
 if (!is.element("EBMAforecastbeta", installed.packages()[, 1])) {
@@ -38,13 +51,6 @@ if (!is.element("EBMAforecastbeta", installed.packages()[, 1])) {
 	err <- paste0("Did not recognize OS ", sys, "; try manual package install")
 	ext <- switch(ext, Windows=".zip", Darwin=".tar.gz", stop(err))
 	install.packages(paste0("R/packages/EBMAforecastbeta_0.44", ext), repos=NULL, 
-		type="source")
-}
-if (!is.element("spduration", installed.packages()[, 1])) {
-	sys <- Sys.info()[["sysname"]]
-	err <- paste0("Did not recognize OS ", sys, "; try manual package install")
-	ext <- switch(ext, Windows=".zip", Darwin=".tar.gz", stop(err))
-	install.packages(paste0("R/packages/spduration_0.12", ext), repos=NULL, 
 		type="source")
 }
 
@@ -65,6 +71,11 @@ library(ROCR)
 library(sbgcop)
 library(spduration)
 library(xtable)
+library("forecast")
+
+
+# Script with functions to create ensemble predictions
+source("R/ensemble_forecast.R")
 
 
 ##------------------------------------------------------------------------------
@@ -207,7 +218,7 @@ for (i in 1:n.models) {
 	a.model <- get(paste0("model", i))
 	p.name  <- paste0("pred.", i)
 	print(p.name)
-	pr.out[, p.name] <- predict(a.model, data=test,  stat="conditional hazard")
+	pr.out[, p.name] <- predict(a.model, newdata=test,  stat="conditional hazard")
 	# fix exact 0's to slightly above 0, otherwise EBMA will not work
 	pr.out[, p.name] <- replace(pr.out[, p.name], pr.out[, p.name]<=0, 1e-19)
 }
@@ -251,9 +262,6 @@ summary(ensemble)
 # How many months out to predict?
 n.ahead <- 6
 
-# Source helper functions
-source("R/utilities/ensemble_forecast.R")
-
 # Ensemble forecasts for n.ahead months
 fcast <- ensembleForecast(n.ahead, n.models=7)
 fcast <- fcast[order(fcast[, 1], decreasing=TRUE), ]
@@ -268,8 +276,9 @@ total <- data.frame(
 # List of top forecasts
 top.list <- head(total[order(total$total, decreasing=TRUE), ], 10)
 top.list <- data.frame(Country=rownames(top.list), Probability=top.list$total)
-print(xtable(top.list, caption="Top 10 forecasts for IRC between April and September 2014 (6 months) using March 2014 data", 
+tbl <- print(xtable(top.list, caption="Top 10 forecasts for IRC between April and September 2014 (6 months) using March 2014 data", 
 	label="tab:forecast"), include.rownames=FALSE)
+writeLines(tbl, "tables/table2-top10.tex")
 
 
 ##------------------------------------------------------------------------------
@@ -304,9 +313,6 @@ auc2 <- function(pred, obs) {
 	res  <- perf@y.values[[1]]
 	return(res)
 }
-
-# Script with functions to create ensemble predictions
-source("R/utilities/ensemble_forecast.R")
 
 # Empty results table
 fit.tab <- data.frame(Model=c("Ensemble", "Logit", "Split-duration"),
@@ -386,18 +392,19 @@ spdur.all <- spduration::spdur(
 summary(spdur.all)
 
 # Now let's calculate in-sample AUC and maximum F-score
-pred.train <- predict(spdur.all, data=train, stat="conditional hazard")
+pred.train <- predict(spdur.all, newdata=train, stat="conditional hazard")
 fit.tab[3, 2] <- auc2(pred.train, train$failure)
 fit.tab[3, 3] <- maxF(pred.train, train$failure)
 
 # Out of sample (test) AUC and maximum F-score
 test.df <- test[with(test, date>=test.start & date<=test.end), ]
-pred.test <- predict(spdur.all, data=test.df, stat="conditional hazard")
+pred.test <- predict(spdur.all, newdata=test.df, stat="conditional hazard")
 fit.tab[3, 4] <- auc2(pred.test, test.df$failure)
 fit.tab[3, 5] <- maxF(pred.test, test.df$failure)
 
 
-xtable(fit.tab, digits=3)
+tbl <- print(xtable(fit.tab, digits=3))
+writeLines(tbl, "tables/table1-fit-comparison.tex")
 
 
 ##------------------------------------------------------------------------------

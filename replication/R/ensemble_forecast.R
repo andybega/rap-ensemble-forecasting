@@ -30,18 +30,18 @@ weighInputs <- function(raw.inputs, ensemble, adjust=FALSE) {
 		# Use model parameters or not?
 	if (adjust==FALSE) {
 		inputs <- raw.inputs
-	} else if (adj==TRUE) {
+	} else if (adjust==TRUE) {
 		useModelParams <- TRUE
 
 		# Adjust model predictions
 		exp <- ensemble@exp
-		inputs.adj <- lapply(inputs.raw, function(x) apply(x, 2, .makeAdj, exp))
+		inputs.adj <- lapply(inputs.raw, .makeAdj, exp)
 		
 		# Model parameter transformaton
 		inputs.model <- NULL
 		for (i in 1:n.models) {
 			model.params <- ensemble@modelParams[, i, ]
-			inputs.model[[i]] <- apply(inputs.adj[[i]], 2, affineTransform, 
+			inputs.model[[i]] <- sapply(inputs.adj[[i]], affineTransform, 
 			model.params[1], model.params[2])
 		}
 		inputs <- inputs.model
@@ -50,21 +50,25 @@ weighInputs <- function(raw.inputs, ensemble, adjust=FALSE) {
 	# Multiply by model weights
 	weights <- ensemble@modelWeights
 
-	# Initialize results matrix
-	pred <- matrix(NA, nrow=nrow(inputs[[1]]), ncol=ncol(inputs[[1]]))
-	for (m in 1:ncol(inputs[[1]])) {
-		# Matrix of predictions from inputs for one month
-		month <- lapply(1:length(inputs), function(i) inputs[[i]][, m])
-		month <- do.call(cbind, month)
-		pred[, m] <- month %*% weights
-	}
-
+	# 2019-04-11: replace block below with these two lines
+	input_preds <- do.call(cbind, inputs)
+	ebma_preds <- (input_preds %*% weights)[, 1]
+	
+	# # Initialize results matrix
+	# pred <- matrix(NA, nrow=nrow(inputs[[1]]), ncol=ncol(inputs[[1]]))
+	# for (m in 1:ncol(inputs[[1]])) {
+	# 	# Matrix of predictions from inputs for one month
+	# 	month <- lapply(1:length(inputs), function(i) inputs[[i]][, m])
+	# 	month <- do.call(cbind, month)
+	# 	pred[, m] <- month %*% weights
+	# }
+	
 	if (adjust==TRUE) {
-		# Convert to probabilities
-		pred <- plogis(pred)
+	  # Convert to probabilities
+	  ebma_preds <- plogis(ebma_preds)
 	}
-
-	return(pred)
+	
+	return(ebma_preds)
 }
 
 # function to create data frame of id, pred, obs for train/calib/test
@@ -72,7 +76,7 @@ predData <- function(data.subset, input.names=model.names, stat="conditional haz
 	# Implicit input: models[1:7], ensemble
 	# List of input model predictions
 	inputs.raw <- lapply(1:n.models, function(x) 
-		predict(get(paste0("model", x)), data.subset, stat=stat))
+		predict(get(paste0("model", x)), newdata = data.subset, stat=stat))
 	names(inputs.raw) <- input.names
 
 	# Calculate ensemble prediction
@@ -120,14 +124,24 @@ ensembleForecast <- function(n.ahead=6, n.models=7, adjust=FALSE) {
 		modelForecast(get(paste0("model", x)), n.ahead=n.ahead, pred.data=data))
 	names(inputs.raw) <- model.names[1:n.models]
 
+	# 2019-04-05: 
+	# inputs.raw originally was/is a list(7) where each element is a 164x6 matrix
+	# with country rows and h/yearmonth columns
+	# make this a list of vectors to match the other changes in weighInputs
+	# cram back to this matrix list structure after pred so the rest doesn't break
+	cc <- rownames(inputs.raw[[1]])
+	ym <- colnames(inputs.raw[[1]])
+	inputs.raw <- lapply(inputs.raw, as.vector)
+	
 	pred <- weighInputs(inputs.raw, ensemble, adjust=adjust)
-
+	
+	# 2019-04-05: 
+	# cram back into matrix
+	pred <- matrix(pred, nrow = length(cc), byrow = FALSE)
+	
 	# Pretty formatting
-	country <- test[format(test$date, "%Y-%m")==format(test.end, "%Y-%m"), ]$country
-	rownames(pred) <- country
-	months <- seq.Date(test.end+1, by="month", length.out=n.ahead)
-	months <- format(months, "%Y-%m")
-	colnames(pred) <- c(months)
-
+	rownames(pred) <- cc
+	colnames(pred) <- ym
+	
 	pred
 }
