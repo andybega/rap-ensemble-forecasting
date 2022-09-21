@@ -7,16 +7,28 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**[Ensemble Forecasting of Irregular Leadership Change](http://rap.sagepub.com/content/1/3/2053168014557511)**
+This repo contains replication materials for:
 
-For questions contact the corresponding author [Michael Ward](mailto:michael.don.ward@gmail.com) or [Andreas Beger](mailto:adbeger@gmail.com).
+Beger, Andreas, Cassy L. Dorff, and Michael D. Ward, 2014, "Ensemble Forecasting of Irregular Regime Change," Research & Politics 1(3): .
 
-The complete [original PITF report](http://arxiv.org/abs/1409.7105) is available on arXiv.org, and contains a large amount of additional information on the method we used for forecasting, accuracy assessments, etc.
+- Journal link: https://doi.org/10.1177/2053168014557511
+- The complete [original PITF report](http://arxiv.org/abs/1409.7105) is available on arXiv.org, and contains a large amount of additional information on the method we used for forecasting, accuracy assessments, etc.
+- Dataverse for data: http://dx.doi.org/10.7910/DVN/27482
+- For questions, contact [Andreas Beger (adbeger@gmail.com)](mailto:adbeger@gmail.com).
+
+****
+
+_Note:_
+
+_Last updated on 2022-09-21_
+
+_The replication now uses the current versions of {spduration} and {EBMAforecast} (which replaced the original {EBMAforecastbeta} package) from CRAN. As a result the original paper results do not exactly match the current output. See below for more details._
 
 
-**Citation:**
+****
 
-Beger, Andreas, Cassy L. Dorff, and Michael D. Ward, 2014, "Ensemble Forecasting of Irregular Regime Change," Research & Politics.
+
+**Bibtex citation:**
 
 ```bibtex
 @article{beger2014ensemble,
@@ -26,7 +38,8 @@ Beger, Andreas, Cassy L. Dorff, and Michael D. Ward, 2014, "Ensemble Forecasting
   year={2014},
   volume={1},
   issue={3},
-  pages={1-7}
+  pages={1-7},
+  doi={https://doi.org/10.1177/2053168014557511}
 }    
 ```
 
@@ -60,6 +73,27 @@ Checked replication and updated several issues. See `runme.R` for more details i
 
 To replicate the exact results, use the saved fitted models and predictions. 
 
+
+## 2022-09-21 Update
+
+I was unable to used the saved models to exactly replicate the forecasts and other materials in the 2014 paper. However, the code does run with the current CRAN versions of {spduration} and {EBMAforecast} (which replicated {EBMAforecastbeta}).
+
+There are some changes, e.g. Table 1 in the paper now looks like this:
+
+|Model          | AUC_is|  F_is| AUC_oos| F_oos|
+|:--------------|------:|-----:|-------:|-----:|
+|Ensemble       |  0.870| 0.079|   0.850| 0.148|
+|Logit          |  0.951| 0.286|   0.776| 0.059|
+|Split-duration |  0.742| 0.085|   0.782| 0.121|
+
+The forecasts are also different. Most consequentially, since it had an ILC, Thailand now has the 3rd highest forecast. In the original results it had the 5th highest. 
+
+The original versions of the {EBMAforecastbeta} and {spduration} packages that were used back in 2014 are still included under [`/replication/R/packages/`](/replication/R/packages/). However, I could not get them to work with the most recent version of R. 
+
+******
+
 ```{r}
 sessionInfo()
 ```
+
+

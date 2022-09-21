@@ -3,6 +3,6 @@ replication/data/irc_data_mod.rda
 replication/data/model_estimates.rda
 .Rproj.user
 
+# Leave the paper source and submission notes off git
 paper/*
-*.Rproj
-beger2014ensemble.pdf
+

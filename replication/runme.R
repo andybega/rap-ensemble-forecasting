@@ -44,16 +44,6 @@
 library("here")
 setwd(here::here("replication"))
 
-
-# Install packages in R/packages if not already done
-if (!is.element("EBMAforecastbeta", installed.packages()[, 1])) {
-	sys <- Sys.info()[["sysname"]]
-	err <- paste0("Did not recognize OS ", sys, "; try manual package install")
-	ext <- switch(ext, Windows=".zip", Darwin=".tar.gz", stop(err))
-	install.packages(paste0("R/packages/EBMAforecastbeta_0.44", ext), repos=NULL, 
-		type="source")
-}
-
 # Figures will be saved to a graphics directory. Create if not exists.
 if (!file.exists("graphics")) {
 	message("Creating 'graphics' subdirectory for figures")
@@ -61,7 +51,7 @@ if (!file.exists("graphics")) {
 }
 
 # Load required libraries
-library(EBMAforecastbeta)
+library(EBMAforecast)
 library(ggplot2)
 library(maptools)
 library(plyr)
@@ -71,7 +61,7 @@ library(ROCR)
 library(sbgcop)
 library(spduration)
 library(xtable)
-library("forecast")
+library(forecast)
 
 
 # Script with functions to create ensemble predictions
@@ -281,6 +271,17 @@ tbl <- print(xtable(top.list, caption="Top 10 forecasts for IRC between April an
 writeLines(tbl, "tables/table2-top10.tex")
 
 
+# 2022-09-21:
+# save the actual forecasts, not just the top
+tbl <- total[order(total$total, decreasing = TRUE), ]
+tbl$country <- rownames(tbl)
+rownames(tbl) <- NULL
+colnames(tbl)[colnames(tbl)=="total"] <- "ebma"
+tbl <- tbl[, c("country", "gwcode", "ebma")]
+write.csv(tbl, here::here("forecasts-201404-to-201409.csv"), row.names = FALSE)
+
+
+
 ##------------------------------------------------------------------------------
 ##
 ##	Comparison to baseline models
@@ -405,6 +406,13 @@ fit.tab[3, 5] <- maxF(pred.test, test.df$failure)
 
 tbl <- print(xtable(fit.tab, digits=3))
 writeLines(tbl, "tables/table1-fit-comparison.tex")
+
+
+# 2022-09-21:
+# write this out for the Readme in markdown
+fit.tab |>
+  setNames(c("Model", "AUC_is", "F_is", "AUC_oos", "F_oos")) |>
+  knitr::kable(format = "markdown", digits = 3) 
 
 
 ##------------------------------------------------------------------------------
